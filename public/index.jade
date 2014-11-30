@@ -1,24 +1,69 @@
 doctype html
-html(lang="fr")
+html(lang="zh")
   head
-    title My Own Bookmarks
+    title 網路功德榜
+    style(type="text/css").
+        tr {
+            text-align: center;
+        }
+        body {
+            background-image: url(images/bg.jpg);
+            margin-left: 0px;
+            margin-top: 0px;
+        }
+        container {
+            position:absolute;
+            left:1px;
+            top:10px;
+            width:100%
+        }
+    script(type="text/javascript").
+        //Specify speed of scroll. Larger=faster (ie: 5)
+        var scrollspeed=cache=2
 
-  body
-    h1 Welcome on My Own Bookmarks
-    p This application will help you manage your bookmarks!
+        //Specify intial delay before scroller starts scrolling (in miliseconds):
+        var initialdelay=500
 
-    form(action="add", method="post")
-        label Title:
-        input(type="text", name="title")
-        label Url:
-        input(type="text", name="url")
-        input(type="submit", value="Add a new bookmark")
+        function initializeScroller(){
+            dataobj=document.all? document.all.datacontainer : document.getElementById("datacontainer")
+            dataobj.style.top="5px"
+            setTimeout("getdataheight()", initialdelay)
+        }
 
-    ul
-        - for(bookmark in bookmarks) {
-            li
-                a(href=bookmarks[bookmark].url)= bookmarks[bookmark].title
-                | &nbsp;- (
-                a(href="delete/#{bookmarks[bookmark].id}") delete
-                | )
-        - }
+        function getdataheight(){
+            thelength=dataobj.offsetHeight
+            if (thelength==0)
+                setTimeout("getdataheight()",10)
+            else
+                scrollDiv()
+        }
+
+        function scrollDiv(){
+            dataobj.style.top=parseInt(dataobj.style.top)-scrollspeed+"px"
+            if (parseInt(dataobj.style.top)<thelength*(-1))
+                dataobj.style.top="5px"
+            setTimeout("scrollDiv()",40)
+        }
+
+        if (window.addEventListener)
+            window.addEventListener("load", initializeScroller, false)
+        else if (window.attachEvent)
+            window.attachEvent("onload", initializeScroller)
+        else
+            window.onload=initializeScroller
+
+  body(onDragStart="return false", oncontextmenu="return false", onselectstart="return false")
+    div#datacontainer(style="position:absolute;left:1px;top:10px;width:100%")
+        table(width="100%", height="600", align="center", cellpadding="5", cellspacing="5")
+            tr
+                td
+        table(id="DataList1", cellspacing="0", cellpadding="0", align="Center", border="0", style="font-weight:normal;font-style:normal;text-decoration:none;width:100%;border-collapse:collapse;")
+            - for(var i = 0; i < donations.length; i++) {
+                tr
+                    - for (donation in donations[i]) {
+                        td(style="font-weight:normal;font-style:normal;text-decoration:none;width:20%;")
+                            span#DataList1_ctl00_anameLabel= donations[i][donation].name
+                            br
+                            br
+                    - }
+            - }

@@ -1,0 +1,22 @@
+doctype html
+html(lang="zh")
+  head
+    title DDM Donations
+
+  body
+    h1 Welcome on DDM Donations Editor
+    p This application will help you manage 捐款護持/網路功德榜!
+
+    form(action="add", method="post")
+        label Name:
+        input(type="text", name="Name")
+        input(type="submit", value="Add Name")
+
+    ul
+        - for(donation in donations) {
+            li
+                a(href=donations[donation].url)= donations[donation].name
+                | &nbsp;- (
+                a(href="delete/#{donations[donation].id}") delete
+                | )
+        - }
